@@ -1,0 +1,185 @@
+import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+
+st.set_page_config(page_title="Bilangan Bulat Kelas 7", layout="centered")
+
+# ======================
+# SIDEBAR MENU
+# ======================
+menu = st.sidebar.selectbox(
+    "Pilih Menu",
+    [
+        "Beranda",
+        "Garis Bilangan",
+        "Notasi Bilangan",
+        "Perbandingan",
+        "Invers",
+        "Operasi",
+        "Faktor",
+        "Soal Kontekstual",
+        "Kuis"
+    ]
+)
+
+# ======================
+# BERANDA
+# ======================
+if menu == "Beranda":
+    st.title("📘 Media Interaktif Bilangan Bulat")
+    st.write("""
+    Aplikasi ini membantu memahami:
+    - Garis bilangan
+    - Operasi bilangan bulat
+    - Invers
+    - Faktor
+    - Soal kehidupan sehari-hari
+    """)
+
+# ======================
+# GARIS BILANGAN
+# ======================
+elif menu == "Garis Bilangan":
+    st.header("📍 Garis Bilangan")
+
+    x = st.slider("Pilih bilangan", -20, 20, 0)
+
+    fig, ax = plt.subplots()
+    ax.axhline(0)
+
+    for i in range(-20, 21):
+        ax.plot(i, 0, 'o')
+
+    ax.plot(x, 0, 'ro')
+    ax.text(x, 0.2, str(x), ha='center')
+
+    ax.set_yticks([])
+    ax.set_xlim(-20, 20)
+
+    st.pyplot(fig)
+
+    st.write(f"Jarak dari nol: {abs(x)}")
+
+# ======================
+# NOTASI
+# ======================
+elif menu == "Notasi Bilangan":
+    st.header("🔢 Notasi Bilangan")
+
+    x = st.number_input("Masukkan bilangan", value=0)
+
+    if x > 0:
+        teks = f"positif {x}"
+    elif x < 0:
+        teks = f"negatif {abs(x)}"
+    else:
+        teks = "nol"
+
+    st.write("Notasi:", x)
+    st.write("Bacaan:", teks)
+
+# ======================
+# PERBANDINGAN
+# ======================
+elif menu == "Perbandingan":
+    st.header("⚖️ Perbandingan Bilangan")
+
+    data = st.text_input("Masukkan bilangan (pisahkan dengan koma)", "-3,5,0,-1")
+
+    try:
+        angka = list(map(int, data.split(",")))
+        st.write("Urutan naik:", sorted(angka))
+        st.write("Urutan turun:", sorted(angka, reverse=True))
+    except:
+        st.error("Input tidak valid")
+
+# ======================
+# INVERS
+# ======================
+elif menu == "Invers":
+    st.header("🔁 Invers Bilangan")
+
+    x = st.number_input("Masukkan bilangan", value=0)
+    invers = -x
+
+    st.write(f"Invers dari {x} adalah {invers}")
+    st.write(f"{x} + ({invers}) = 0")
+
+# ======================
+# OPERASI
+# ======================
+elif menu == "Operasi":
+    st.header("➕➖✖️➗ Operasi Bilangan")
+
+    a = st.number_input("Bilangan pertama", value=0)
+    b = st.number_input("Bilangan kedua", value=0)
+
+    operasi = st.selectbox("Pilih operasi", ["+", "-", "×", "÷"])
+
+    if operasi == "+":
+        hasil = a + b
+        st.write(f"{a} + {b} = {hasil}")
+
+    elif operasi == "-":
+        hasil = a - b
+        st.write(f"{a} - {b} = {hasil}")
+
+    elif operasi == "×":
+        hasil = a * b
+        st.write(f"{a} × {b} = {hasil}")
+
+    elif operasi == "÷":
+        if b != 0:
+            hasil = a / b
+            st.write(f"{a} ÷ {b} = {hasil}")
+        else:
+            st.error("Tidak bisa dibagi nol")
+
+# ======================
+# FAKTOR
+# ======================
+elif menu == "Faktor":
+    st.header("🧩 Faktor Bilangan")
+
+    x = st.number_input("Masukkan bilangan", min_value=1, value=6)
+
+    faktor = [i for i in range(1, x+1) if x % i == 0]
+
+    st.write("Faktor:", faktor)
+
+# ======================
+# SOAL KONTEKSTUAL
+# ======================
+elif menu == "Soal Kontekstual":
+    st.header("🌍 Soal Kehidupan Sehari-hari")
+
+    st.write("Suhu awal -2°C, naik 5°C. Berapa suhu sekarang?")
+
+    jawaban = st.number_input("Jawaban kamu", value=0)
+
+    if st.button("Cek"):
+        if jawaban == 3:
+            st.success("Benar!")
+        else:
+            st.error("Salah. Jawaban yang benar adalah 3°C")
+
+# ======================
+# KUIS
+# ======================
+elif menu == "Kuis":
+    st.header("📝 Kuis")
+
+    import random
+
+    a = random.randint(-10, 10)
+    b = random.randint(-10, 10)
+
+    st.write(f"Berapakah {a} + {b}?")
+
+    jawaban = st.number_input("Jawaban", value=0)
+
+    if st.button("Cek Jawaban"):
+        if jawaban == a + b:
+            st.success("Benar!")
+        else:
+            st.error(f"Salah, jawabannya {a+b}")
